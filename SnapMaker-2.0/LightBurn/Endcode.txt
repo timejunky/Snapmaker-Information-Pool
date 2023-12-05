@@ -1,22 +1,38 @@
-;Endode:
-; source:Full lLightburn Control Guide Full Lightburn Control Guide - #261 by VaporPhoxxe - Snapmaker 2.0 - Snapmaker: where creation happens
-; Update: timeJunky; 04.12.2023 Extended and commented
-; see gcode reference guide for SnapMaker https://snapmaker.github.io/Documentation/gcode/G000-G001
 ; Endcode
+
+; source: First version from https://forum.snapmaker.com/t/full-lightburn-control-guide/27638
+;         by Skreelink
+; Update: timeJunky - 04.12.2023 Extended and commented
+; see gcode reference guide for SnapMaker https://snapmaker.github.io/Documentation/gcode/G000-G001
+
 ;
 ; General I
 ; ;;;;;;;;
-M5 ; Safety line, ensures the laser is offline and actually off.
-G0 Z330 F6000 ; Custom line to rapid toss the toolhead up out of the way.
-G0 Y350 ; Custom line to rapid the bed forward.
-G28 ; Safety home, I’ve noticed sometimes my machine is offset if I don’t home every now and then.
-M1010 S3 P100 ; Light to 100%
-M1010 S4 P0 ; Fan Air to 0%
-M1010 S1; Enable door opening trigger
-M1010 S12; Refresh door Status
+; Safety line, ensures the laser is offline and actually off.
+M5
+
+; Custom line to rapid toss the toolhead up out of the way.
+G0 Z330 F6000
+; Custom line to rapid the bed forward.
+G0 Y350
+; Safety home, I’ve noticed sometimes my machine is offset if I don’t home every now and then.
+G28
+; Light to 100%
+M1010 S3 P100
+; Fan Air to 0%
+M1010 S4 P0
+
+; Enable door opening trigger
+M1010 S1
+; Refresh door Status
+M1010 S12
+
 ; see AirPurifier gcode: https://snapmaker.github.io/Documentation/gcode/M1011M1011
-;M1011 F0;Air Purifier Off
+;Air Purifier Off
+;M1011 F0
+
 ;
 ; Section for 20W/40W Laser
 ; ;;;;;;;;
-M9 ; AirAssist to 0%
+; AirAssist to 0%
+M9
