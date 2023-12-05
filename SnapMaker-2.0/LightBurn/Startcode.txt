@@ -1,0 +1,50 @@
+;Startcode:
+; source:Full lLightburn Control Guide Full Lightburn Control Guide - #261 by VaporPhoxxe - Snapmaker 2.0 - Snapmaker: where creation happens
+; Update: timeJunky; 04.12.2023 Extended and commented
+; see gcode reference guide for SnapMaker https://snapmaker.github.io/Documentation/gcode/G000-G001
+;
+; General I
+; ;;;;;;;;
+M106 P0 S255 ; This line is spit out by Luban and Snapmaker settings in Lightburn, so I include it.
+G28 ; Safety home, incase you forgot after power on.
+G53 ; Changes to Machine Coords.
+;
+; Section for 10W Laser
+; ;;;;;;;;
+; !!! Attention test yourself your Z value by own calibration!
+; Taking over the Z value without verification may lead to harm seriosly your rails or yor bed!!!
+; uncomment below if you have the 10W Module
+; comment out by ; if you do not have it ini usage!!!
+; G0 Z23 F6000 ; IMPORTANT, the Z value here is your LASER HEIGHT on the touchscreen.
+;
+; Section I for 20W/40W Laser
+; ;;;;;;;;
+; !!! Attention test yourself your Z value by own calibration!
+; Taking over the Z value without verification may lead to harm seriosly your rails or or bed!!!
+; uncomment below if you have the 40W Module
+; comment out by ; if you do not have it ini usage!!!
+G0 Z83.9 F6000 ; IMPORTANT, the Z value here is your LASER HEIGHT on the touchscreen.
+;
+; General II
+; ;;;;;;;;
+G54 ; Changes back to Work Coords
+G92 Z0 ; This sets Z Work Origin to 0, making your laser height as 0.
+G0 Z300 ; Moves the toolhead back up out of the way.
+G53 ; Back to machine coords!
+G0 X2 Y0 F6000 ; IMPORTANT, this is the offset you found following my laser guide!
+G54 ; Oops, we’re back in work coords.
+G92 X0 Y0 ; Yep, we gotta set 0,0 on X,Y as well!
+M3 S0 ; This is a safety line, it brings the laser online at 0 power, basically a ready state.
+M1010 S3 P50 ; Light to 50%
+; !!! Attention: uncomment door sensor at own risc !!!
+M1010 S0; door sensor off
+M1010 S4 P100 ; Fan Air to 100%
+; see AirPurifier gcode: https://snapmaker.github.io/Documentation/gcode/M1011M1011 ; choose between F1, F2, F3 gear working
+; M1011 F3; Air Purifier on
+; M1011 F3 S1
+;
+; Section II for 20W/40W Laser
+; ;;;;;;;;
+;M7; Air Assist ON (M7, M8 both works)
+M8; Air Assist ON (M7, M8 both works)
+M2002 T3 P0; CrossHair Pointer off
