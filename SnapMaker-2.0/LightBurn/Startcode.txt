@@ -3,13 +3,13 @@
 ; source: First version from https://forum.snapmaker.com/t/full-lightburn-control-guide/27638
 ;         by Skreelink
 ; Update: timeJunky - 04.12.2023 Extended and commented
-; see gcode reference guide for SnapMaker https://snapmaker.github.io/Documentation/gcode/G000-G001
+; 1) see gcode reference guide for SnapMaker https://snapmaker.github.io/Documentation/gcode/G000-G001
+; 2) https://marlinfw.org/meta/gcode/
 
 ;
-; General I
+; Section: General I
 ; ;;;;;;;;
 ; This line is spit out by Luban and Snapmaker settings in Lightburn, so I include it.
-
 M106 P0 S255
 ; Safety home, in case you forgot after power on.
 G28
@@ -17,26 +17,30 @@ G28
 G53
 
 ;
-; Section for 10W Laser
+; Section: User specific
+; Individual machine settings as input is required
 ; ;;;;;;;;
 
 ; !!! Attention test yourself your Z value by own calibration!
-; IMPORTANT, the Z value here is your LASER HEIGHT on the touchscreen.
-; Taking over the Z value without verification may lead to harm seriosly your rails or yor bed!!!
-; uncomment below if you have the 10W Module
-; comment out or in
-; G0 Z23 F6000
+; IMPORTANT, the Z value here is YOUR LASER HEIGHT on the touchscreen.
+; Taking over the Z value without verification may lead to harm seriosly your rails, bed or laser module!!!
 
-;
-; Section I for 20W/40W Laser
-; ;;;;;;;;
+; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+; !!!! If you agree and setup your settings then comment in the line M1999 below by a semicolon !!!
+; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+; this will restart your machine as long as you do not admit
+M1999
 
-; !!! Attention test yourself your Z value by own calibration!
-; IMPORTANT, the Z value here is your LASER HEIGHT on the touchscreen.
-; Taking over the Z value without verification may lead to harm seriosly your rails or yor bed!!!
-; uncomment below if you have the 10W Module
-; comment out or in
-G0 Z83.9 F6000
+; comment out or in corresponding your module and machine
+
+; 10W Laser - Example value only for orientation, use at own risc!!!
+;G0 Z23 F6000
+
+; 20W Laser - Example value only for orientation, use at own risc!!!
+;G0 Z31.1 F6000
+
+; 40W Laser - Example value only for orientation, use at own risc!!!
+;G0 Z83.9 F6000
 
 ;
 ; General II
@@ -59,8 +63,8 @@ G92 X0 Y0
 ; This is a safety line, it brings the laser online at 0 power, basically a ready state.
 
 M3 S0
-; Light to 50%
-M1010 S3 P50
+; Light recommended to 30-50%
+M1010 S3 P30
 
 ; !!! Attention: uncomment door sensor at own risc !!!
 ; door sensor off
