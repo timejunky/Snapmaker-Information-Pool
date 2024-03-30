@@ -3,13 +3,15 @@
 ; source: First version from https://forum.snapmaker.com/t/full-lightburn-control-guide/27638
 ;         by Skreelink
 ; Update: timeJunky - 04.12.2023 Extended and commented
+; Update: timeJunky - 30.03.2024 Code optimization
+
 ; 1) see gcode reference guide for SnapMaker https://snapmaker.github.io/Documentation/gcode/G000-G001
 ; 2) https://marlinfw.org/meta/gcode/
 
 ;
 ; Section: General I
 ; ;;;;;;;;
-; This line is spit out by Luban and Snapmaker settings in Lightburn, so I include it.
+; This line is spit out by Luban and Snapmaker settings in Lightburn, so this line is included.
 M106 P0 S255
 ; Safety home, in case you forgot after power on.
 G28
@@ -21,26 +23,46 @@ G53
 ; Individual machine settings as input is required
 ; ;;;;;;;;
 
-; !!! Attention test yourself your Z value by own calibration!
+; !!! Attention: Test yourself your Z value by own calibration!
 ; IMPORTANT, the Z value here is YOUR LASER HEIGHT on the touchscreen.
 ; Taking over the Z value without verification may lead to harm seriosly your rails, bed or laser module!!!
+; Z Values are also depending on the way how your plate is mounted!
 
-; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-; !!!! If you agree and setup your settings then comment in the line M1999 below by a semicolon !!!
-; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-; this will restart your machine as long as you do not admit
+; !!! Attention: Keep the left rear corner free of any height obstacles 
+;                in a reactangular area of 3cm x 7cm (to left edge x to rear edge)
+;                Btw, this area depends on your own module and the manner of fixation (measure and assert yourself!)
+
+; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+; !!!! Please confirm that you have read all comments carefully     !!!
+; !!!! and assert to continue at own risc and responsibility        !!!
+; !!!! Furthermore you agree and setup your own machine settings!   !!!
+; !!!! Confirmation is done by commenting/ deactivating the line    !!!
+; !!!! with M1999 below by a semicolon                              !!!
+; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+; Sry, this will restart your machine as long as you do not admit AND READ ALL
 M1999
 
-; comment out or in corresponding your module and machine
+
+; comment out corresponding your module and machine + after setting your z values
 
 ; 10W Laser - Example value only for orientation, use at own risc!!!
-;G0 Z23 F6000
+; close up fast and approxmiate slow
+; 1. Z (always higher) to step down fast by F600 / 2. Z slowly aproximate by F600
+;G0 Z35 F6000
+;G0 Z23 F600
 
 ; 20W Laser - Example value only for orientation, use at own risc!!!
-;G0 Z31.1 F6000
+; close up fast and approxmiate slow
+; 1. Z (always higher) to step down fast by F600 / 2. Z slowly aproximate by F600
+;G0 Z45 F6000
+;G0 Z31.1 F600
 
 ; 40W Laser - Example value only for orientation, use at own risc!!!
-;G0 Z83.9 F6000
+; close up fast and approxmiate slow
+; 1. Z (always higher) to step down fast by F600 / 2. Z slowly aproximate by F600
+;G0 Z85 F6000
+;G0 Z58.3 F600
+; fyi these values are valid for me with screws on 40W + quick snap on rail (see guide) 
 
 ;
 ; General II
@@ -54,8 +76,12 @@ G92 Z0
 G0 Z300
 ; Back to machine coords!
 G53
+
 ; IMPORTANT, this is the offset you found following my laser guide!
 G0 X2 Y0 F6000
+; this is my adjustment corresponds to my laser bed at left front corner
+; G0 X-19 Y-14 F6000
+
 ; Oops, we’re back in work coords.
 G54
 ; Yep, we gotta set 0,0 on X,Y as well!
@@ -63,17 +89,19 @@ G92 X0 Y0
 ; This is a safety line, it brings the laser online at 0 power, basically a ready state.
 
 M3 S0
+
 ; Light recommended to 30-50%
 M1010 S3 P30
 
 ; !!! Attention: uncomment door sensor at own risc !!!
 ; door sensor off
-M1010 S0
+;M1010 S0
 
 ; Fan Air to 100%
 M1010 S4 P100
 
-; see AirPurifier gcode: https://snapmaker.github.io/Documentation/gcode/M1011M1011 ; choose between F1, F2, F3 gear working
+; see AirPurifier gcode: https://snapmaker.github.io/Documentation/gcode/M1011M1011
+; choose between F1, F2, F3 gear working
 ; M1011 F3; Air Purifier on
 ; M1011 F3 S1
 
@@ -87,3 +115,33 @@ M8
 
 ; CrossHair Pointer off
 M2002 T3 P0
+
+
+; Set flame detector sensitivity 
+; fyi: what happens, if this triggers?
+;      There is a short Warning on your display
+;      but the maschine does not move away
+;      This is the reason, why laser should never run UNATTENDED
+;      LightBurn tries to continues after a while
+;      You can change the sensitivity if the material test glows and triggers too fast
+;
+; M2002 T5 PXX The parameter carried after P, 
+; if the value is in the range of 0-4095, 
+; the larger the value, the more sensitive it is.
+; To disable the flame detector, enter a value greater than 4095, such as 4096.
+; Examples for the flame detector
+
+; ATTENTION: High risc to burn down your appartment
+
+; Flame sensor off 
+; see guide... I won't write it here :-)
+
+; Flame sensor minimum sensitivity
+;M2002 T5 P0
+
+; Flame sensor medium sensitivity
+;M2002 T5 P2048
+
+; Flame sensor maximum sensitivity
+;2002 T5 P4095
+

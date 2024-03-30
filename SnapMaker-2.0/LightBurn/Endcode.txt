@@ -3,6 +3,8 @@
 ; source: First version from https://forum.snapmaker.com/t/full-lightburn-control-guide/27638
 ;         by Skreelink
 ; Update: timeJunky - 04.12.2023 Extended and commented
+; Update: timeJunky - 30.03.2024 Code optimization
+
 ; 1) see gcode reference guide for SnapMaker https://snapmaker.github.io/Documentation/gcode/G000-G001
 ; 2) https://marlinfw.org/meta/gcode/
 
@@ -36,4 +38,4 @@ M1010 S12
 ; Section: 20W/40W Laser
 ; ;;;;;;;;
 ; AirAssist to 0%
-M9
+;M9
